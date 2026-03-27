@@ -1,0 +1,40 @@
+Device: cuda
+Output dir: /home/leo.rodrigues/Akkadian_MT/scripts/../checkpoints/bilstm
+Train: 5098, Val: 598
+Source vocab size: 86
+Target vocab size: 125
+Total parameters: 17,343,613
+Traceback (most recent call last):
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/04_train_bilstm.py", line 428, in <module>
+    main()
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/04_train_bilstm.py", line 339, in main
+    output = model(src, tgt, src_lens, TEACHER_FORCING_RATIO)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/04_train_bilstm.py", line 209, in forward
+    prediction, hidden, cell, _ = self.decoder(
+                                  ^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/04_train_bilstm.py", line 176, in forward
+    context, attn_weights = self.attention(hidden[-1], encoder_outputs, mask)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/04_train_bilstm.py", line 150, in forward
+    energy = self.v(torch.tanh(query + keys)).squeeze(2)  # (batch, src_len)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 38.00 MiB. GPU 0 has a total capacity of 31.58 GiB of which 23.31 MiB is free. Process 900011 has 20.92 GiB memory in use. Including non-PyTorch memory, this process has 10.43 GiB memory in use. Of the allocated memory 10.00 GiB is allocated by PyTorch, and 72.95 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
