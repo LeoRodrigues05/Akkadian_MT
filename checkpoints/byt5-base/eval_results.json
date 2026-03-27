@@ -1,7 +1,9 @@
 {
-  "eval_loss": 0.5267109274864197,
-  "eval_runtime": 4.6755,
-  "eval_samples_per_second": 127.901,
-  "eval_steps_per_second": 32.082,
-  "epoch": 15.0
+  "model": "ByT5-base",
+  "bleu": 19.45666039246629,
+  "chrf++": 37.71112283057141,
+  "geo_mean": 27.08749729917864,
+  "total_params": 582832896,
+  "num_beams": 4,
+  "val_samples": 598
 }
