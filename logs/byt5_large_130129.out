@@ -1,0 +1,16 @@
+Job started: Mon Apr 20 05:45:32 AM +04 2026
+Node: ws-l5-028
+GPU: NVIDIA RTX 5000 Ada Generation
+Device: cuda
+GPU: NVIDIA RTX 5000 Ada Generation
+GPU Memory: 33.9 GB
+
+============================================================
+Stage 2: Supervised Fine-Tuning (SFT)
+  Model: google/byt5-large
+  Output: /home/leo.rodrigues/Akkadian_MT/scripts/../checkpoints/byt5-large-sft
+  Train: scripts/data/augmented_train_split.csv
+  Val: scripts/data/augmented_val_split.csv
+============================================================
+Parallel data — Train: 10009, Val: 790
+Tokenizing datasets...

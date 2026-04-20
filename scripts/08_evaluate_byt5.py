@@ -3,6 +3,7 @@ STEP 8b — ByT5 Evaluation: BLEU / chrF++ on validation set
 Loads the best ByT5 checkpoint and runs beam-search generation to compute
 BLEU, chrF++, and geometric mean on aligned_val_split.csv.
 """
+import argparse
 import os
 import json
 import math
@@ -15,8 +16,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.join(SCRIPT_DIR, "..")
 DATA_DIR = os.path.join(SCRIPT_DIR, "data")
 
-MODEL_PATH = os.path.join(PROJECT_DIR, "checkpoints", "byt5-base", "best_model")
-VAL_CSV = os.path.join(DATA_DIR, "aligned_val_split.csv")
+DEFAULT_MODEL_PATH = os.path.join(PROJECT_DIR, "checkpoints", "byt5-base", "best_model")
+DEFAULT_VAL_CSV = os.path.join(DATA_DIR, "aligned_val_split.csv")
 
 BATCH_SIZE = 16
 NUM_BEAMS = 4
@@ -26,6 +27,16 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Evaluate ByT5 model")
+    parser.add_argument("--model", default=DEFAULT_MODEL_PATH, help="Path to model checkpoint")
+    parser.add_argument("--val-csv", default=DEFAULT_VAL_CSV, help="Path to validation CSV")
+    parser.add_argument("--out", default=None, help="Path to save eval_results.json (default: <model_dir>/../eval_results.json)")
+    parser.add_argument("--label", default=None, help="Model label for results JSON")
+    args = parser.parse_args()
+
+    MODEL_PATH = args.model
+    VAL_CSV = args.val_csv
+
     print(f"Device: {DEVICE}")
     print(f"Model: {MODEL_PATH}")
     print(f"Val CSV: {VAL_CSV}")
@@ -80,12 +91,15 @@ def main():
     chrf_score = chrf.score
     geo_mean = math.sqrt(bleu_score * chrf_score) if bleu_score > 0 and chrf_score > 0 else 0.0
 
+    model_label = args.label or os.path.basename(os.path.dirname(MODEL_PATH))
+
     print(f"\n{'='*60}")
-    print(f"ByT5-base Validation Results")
+    print(f"{model_label} Validation Results")
     print(f"  BLEU:     {bleu_score:.2f}")
     print(f"  chrF++:   {chrf_score:.2f}")
     print(f"  Geo Mean: {geo_mean:.2f}")
     print(f"  Params:   {total_params:,}")
+    print(f"  Val CSV:  {VAL_CSV}")
     print(f"{'='*60}")
 
     # ── Sample predictions ─────────────────────────────────────────────────
@@ -98,16 +112,22 @@ def main():
 
     # ── Save results ───────────────────────────────────────────────────────
     results = {
-        "model": "ByT5-base",
+        "model": model_label,
         "bleu": bleu_score,
         "chrf++": chrf_score,
         "geo_mean": geo_mean,
         "total_params": total_params,
         "num_beams": NUM_BEAMS,
         "val_samples": len(sources),
+        "model_path": MODEL_PATH,
+        "val_csv": VAL_CSV,
     }
 
-    results_path = os.path.join(PROJECT_DIR, "checkpoints", "byt5-base", "eval_results.json")
+    if args.out:
+        results_path = args.out
+    else:
+        results_path = os.path.join(os.path.dirname(MODEL_PATH), "..", "eval_results.json")
+    results_path = os.path.normpath(results_path)
     with open(results_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"Results saved to: {results_path}")

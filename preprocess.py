@@ -7,7 +7,10 @@ import unicodedata
 
 
 # ── Subscript digit mapping ────────────────────────────────────────────────
-_SUBSCRIPT_MAP = str.maketrans("₀₁₂₃₄₅₆₇₈₉", "0123456789")
+_SUBSCRIPT_MAP = str.maketrans("₀₁₂₃₄₅₆₇₈₉ₓ", "0123456789x")
+
+# ── Hamza / Ayin / glottal stop characters to delete ──────────────────────
+_GLOTTAL_CHARS = "\u02BE\u02BF\u02BC\u02BB\u0027\u2018\u2019"  # ʾ ʿ ʼ ʻ ' ' '
 
 # ── Determinative patterns ─────────────────────────────────────────────────
 # Common Sumerian determinatives in Akkadian texts
@@ -22,25 +25,50 @@ _DETERMINATIVE_PATTERNS = [
     # Personal name (feminine)
     (re.compile(r'\{f\}', re.IGNORECASE), '{f}'),
     (re.compile(r'\{mi\}', re.IGNORECASE), '{f}'),
+    (re.compile(r'\{munus\}', re.IGNORECASE), '{f}'),
     # Plural
     (re.compile(r'\{mesh\}', re.IGNORECASE), '{mesh}'),
     (re.compile(r'\{meš\}', re.IGNORECASE), '{mesh}'),
     # Wood/tree
     (re.compile(r'\{gish\}', re.IGNORECASE), '{gish}'),
     (re.compile(r'\{giš\}', re.IGNORECASE), '{gish}'),
+    (re.compile(r'\{ĝeš\}', re.IGNORECASE), '{gish}'),
+    (re.compile(r'\{geš\}', re.IGNORECASE), '{gish}'),
     # Reed
     (re.compile(r'\{gi\}', re.IGNORECASE), '{gi}'),
     # Stone
     (re.compile(r'\{na4\}', re.IGNORECASE), '{na4}'),
+    (re.compile(r'\{na₄\}', re.IGNORECASE), '{na4}'),
     # Metal
     (re.compile(r'\{urudu\}', re.IGNORECASE), '{urudu}'),
     # Textile
     (re.compile(r'\{tug2\}', re.IGNORECASE), '{tug2}'),
+    (re.compile(r'\{tug₂\}', re.IGNORECASE), '{tug2}'),
     (re.compile(r'\{túg\}', re.IGNORECASE), '{tug2}'),
     # City
     (re.compile(r'\{uru\}', re.IGNORECASE), '{uru}'),
     # Land/country
     (re.compile(r'\{kur\}', re.IGNORECASE), '{kur}'),
+    # Stars
+    (re.compile(r'\{mul\}', re.IGNORECASE), '{mul}'),
+    # Buildings
+    (re.compile(r'\{e₂\}', re.IGNORECASE), '{e2}'),
+    (re.compile(r'\{é\}', re.IGNORECASE), '{e2}'),
+    # Tablet/document
+    (re.compile(r'\{dub\}', re.IGNORECASE), '{dub}'),
+    # River/canal
+    (re.compile(r'\{id₂\}', re.IGNORECASE), '{id2}'),
+    (re.compile(r'\{íd\}', re.IGNORECASE), '{id2}'),
+    # Birds
+    (re.compile(r'\{mušen\}', re.IGNORECASE), '{mushen}'),
+    # Skin/leather
+    (re.compile(r'\{kuš\}', re.IGNORECASE), '{kush}'),
+    # Plants
+    (re.compile(r'\{u₂\}', re.IGNORECASE), '{u2}'),
+    (re.compile(r'\{ú\}', re.IGNORECASE), '{u2}'),
+    # Professions
+    (re.compile(r'\{lu₂\}', re.IGNORECASE), '{lu2}'),
+    (re.compile(r'\{lú\}', re.IGNORECASE), '{lu2}'),
 ]
 
 # ── Accented vowel mappings (index notation → diacritics) ──────────────────
@@ -87,22 +115,30 @@ def clean_transliteration(text: str) -> str:
     # Unicode NFKC normalization
     text = unicodedata.normalize("NFKC", text)
 
-    # Convert Ḫ/ḫ → H/h (competition convention)
+    # Convert Ḫ/ḫ → H/h (competition convention — test data uses only H/h)
     text = text.replace("Ḫ", "H").replace("ḫ", "h")
 
-    # Convert subscript digits ₀-₉ → 0-9
+    # Remove Hamza/Ayin/glottal characters (ʾ ʿ ʼ etc.)
+    for ch in _GLOTTAL_CHARS:
+        text = text.replace(ch, "")
+
+    # Convert subscript digits ₀-₉ → 0-9, ₓ → x
     text = text.translate(_SUBSCRIPT_MAP)
 
     # Normalize determinatives
     for pattern, replacement in _DETERMINATIVE_PATTERNS:
         text = pattern.sub(replacement, text)
 
-    # Standardize gap markers: various forms → <gap>
-    # [x], [x x], [x x x], [...], …, [broken], [damaged], etc.
+    # Standardize gap markers: various forms → <gap> / <big_gap>
+    # Large breaks first
+    text = re.sub(r'\{large break\}', '<big_gap>', text, flags=re.IGNORECASE)
+    text = re.sub(r'\{big gap\}', '<big_gap>', text, flags=re.IGNORECASE)
+    text = re.sub(r'\[…\s*…\]', '<big_gap>', text)
+    text = re.sub(r'…', '<big_gap>', text)
+    # Small breaks
     text = re.sub(r'\[(?:x\s*)+\]', '<gap>', text)
     text = re.sub(r'\[\.{2,}\]', '<gap>', text)
     text = re.sub(r'\.{3,}', '<gap>', text)
-    text = re.sub(r'…', '<gap>', text)
     text = re.sub(r'\[broken\]', '<gap>', text, flags=re.IGNORECASE)
     text = re.sub(r'\[damaged\]', '<gap>', text, flags=re.IGNORECASE)
     text = re.sub(r'\[missing\]', '<gap>', text, flags=re.IGNORECASE)
@@ -111,10 +147,12 @@ def clean_transliteration(text: str) -> str:
     # Half-brackets (uncertain reading): ˹text˺ → text
     text = re.sub(r'[˹⸢]', '', text)
     text = re.sub(r'[˺⸣]', '', text)
-    # Square brackets (restoration): [text] → text (but NOT <gap>)
+    # Double angle brackets (errant signs): <<text>> → remove entirely
+    text = re.sub(r'<<[^>]*>>', '', text)
+    # Square brackets (restoration): [text] → text (but NOT <gap>/<big_gap>)
     text = re.sub(r'\[([^\]]*)\]', r'\1', text)
-    # Angle brackets (scribal error correction): <text> → text (but NOT <gap>)
-    text = re.sub(r'<(?!gap>)([^>]*)>', r'\1', text)
+    # Angle brackets (scribal error correction): <text> → text (but NOT <gap>/<big_gap>)
+    text = re.sub(r'<(?!gap>|big_gap>)([^>]*)>', r'\1', text)
     # Remove !, ?, *, # (editorial marks on individual signs)
     text = re.sub(r'[!?*#]', '', text)
 
@@ -130,7 +168,10 @@ def clean_transliteration(text: str) -> str:
         text = pattern.sub(replacement, text)
 
     # Deduplicate sequential gaps
+    text = re.sub(r'(<big_gap>\s*){2,}', '<big_gap> ', text)
     text = re.sub(r'(<gap>\s*){2,}', '<gap> ', text)
+    # Collapse mixed gap sequences to big_gap
+    text = re.sub(r'(<(?:big_)?gap>\s*){2,}', '<big_gap> ', text)
 
     # Normalize whitespace
     text = re.sub(r'\s+', ' ', text).strip()
@@ -167,10 +208,12 @@ def clean_translation(text: str) -> str:
     text = re.sub(r'[˹⸢˺⸣]', '', text)
 
     # Normalize gap markers in translations
+    text = re.sub(r'\[…\s*…\]', '<big_gap>', text)
+    text = re.sub(r'…', '<big_gap>', text)
     text = re.sub(r'\[\.{2,}\]', '<gap>', text)
     text = re.sub(r'\.{3,}', '<gap>', text)
-    text = re.sub(r'…', '<gap>', text)
     text = re.sub(r'\bbroken\b', '<gap>', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bdamaged\b', '<gap>', text, flags=re.IGNORECASE)
 
     # Normalize fractions to Unicode
     for frac, uni in _FRACTION_MAP.items():

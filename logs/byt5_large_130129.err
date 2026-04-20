@@ -1,0 +1,43 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/500 [00:00<?, ?it/s]Loading weights: 100%|██████████| 500/500 [00:00<00:00, 47980.96it/s]
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to encoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to decoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+Tokenizing train:   0%|          | 0/10009 [00:00<?, ? examples/s]Tokenizing train:  10%|▉         | 1000/10009 [00:04<00:36, 245.28 examples/s]Tokenizing train:  20%|█▉        | 2000/10009 [00:07<00:29, 267.92 examples/s]Tokenizing train:  30%|██▉       | 3000/10009 [00:11<00:26, 264.55 examples/s]Tokenizing train:  40%|███▉      | 4000/10009 [00:15<00:22, 267.83 examples/s]Tokenizing train:  50%|████▉     | 5000/10009 [00:18<00:18, 267.14 examples/s]Tokenizing train:  60%|█████▉    | 6000/10009 [00:22<00:14, 269.08 examples/s]Tokenizing train:  70%|██████▉   | 7000/10009 [00:25<00:10, 274.87 examples/s]Tokenizing train:  80%|███████▉  | 8000/10009 [00:29<00:07, 277.23 examples/s]Tokenizing train:  90%|████████▉ | 9000/10009 [00:33<00:03, 274.95 examples/s]Tokenizing train: 100%|█████████▉| 10000/10009 [00:36<00:00, 277.46 examples/s]Tokenizing train: 100%|██████████| 10009/10009 [00:36<00:00, 271.96 examples/s]
+Tokenizing val:   0%|          | 0/790 [00:00<?, ? examples/s]Tokenizing val: 100%|██████████| 790/790 [00:04<00:00, 195.94 examples/s]Tokenizing val: 100%|██████████| 790/790 [00:04<00:00, 195.89 examples/s]
+warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+Traceback (most recent call last):
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/15_train_byt5_large.py", line 443, in <module>
+    main()
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/15_train_byt5_large.py", line 428, in main
+    run_sft(
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/15_train_byt5_large.py", line 340, in run_sft
+    trainer = Seq2SeqTrainer(
+              ^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer_seq2seq.py", line 72, in __init__
+    super().__init__(
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer.py", line 480, in __init__
+    self._move_model_to_device(model, args.device)
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer.py", line 4402, in _move_model_to_device
+    model = model.to(device)
+            ^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/modeling_utils.py", line 3587, in to
+    return super().to(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1343, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 903, in _apply
+    module._apply(fn)
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 903, in _apply
+    module._apply(fn)
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 903, in _apply
+    module._apply(fn)
+  [Previous line repeated 4 more times]
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    param_applied = fn(param)
+                    ^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1329, in convert
+    return t.to(
+           ^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 31.58 GiB of which 13.31 MiB is free. Process 1067520 has 26.49 GiB memory in use. Including non-PyTorch memory, this process has 4.89 GiB memory in use. Of the allocated memory 4.25 GiB is allocated by PyTorch, and 349.16 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

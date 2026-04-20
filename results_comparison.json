@@ -5,6 +5,12 @@
     "geo_mean": 0,
     "params": "\u2014"
   },
+  "ByT5-base-new (validation)": {
+    "bleu": 19.46,
+    "chrf++": 37.71,
+    "geo_mean": 27.09,
+    "params": 582832896
+  },
   "BiLSTM Seq2Seq": {
     "bleu": 17.445248443431108,
     "chrf++": 36.167135971234124,

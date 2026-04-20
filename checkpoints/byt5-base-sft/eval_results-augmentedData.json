@@ -1,0 +1,11 @@
+{
+  "model": "ByT5-base-sft (augmented data)",
+  "bleu": 33.27093717891417,
+  "chrf++": 49.74609817465914,
+  "geo_mean": 40.6829117353365,
+  "total_params": 582832896,
+  "num_beams": 4,
+  "val_samples": 598,
+  "model_path": "checkpoints/byt5-base-sft/best_model",
+  "val_csv": "scripts/data/aligned_val_split.csv"
+}
