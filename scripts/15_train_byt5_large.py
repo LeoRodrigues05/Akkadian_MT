@@ -200,7 +200,7 @@ def run_cpt(model_name: str, output_dir: str, epochs: int, lr: float, batch_size
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(
         model_name,
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
+        dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
     )
 
     # Enable gradient checkpointing for memory efficiency
@@ -273,6 +273,7 @@ def run_sft(
     lr: float,
     batch_size: int,
     label_smoothing: float,
+    resume_from_checkpoint: str = None,
 ):
     """Stage 2: Supervised Fine-Tuning on parallel data."""
     print(f"\n{'='*60}")
@@ -286,7 +287,7 @@ def run_sft(
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(
         model_name,
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
+        dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
     )
 
     # Enable gradient checkpointing
@@ -353,7 +354,9 @@ def run_sft(
     )
 
     print("Starting SFT...")
-    trainer.train()
+    if resume_from_checkpoint:
+        print(f"Resuming from checkpoint: {resume_from_checkpoint}")
+    trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
     best_dir = os.path.join(output_dir, "best_model")
     trainer.save_model(best_dir)
@@ -399,6 +402,7 @@ def main():
     parser.add_argument("--sft-lr", type=float, default=3e-4, help="SFT learning rate")
     parser.add_argument("--batch-size", type=int, default=2, help="Per-device batch size")
     parser.add_argument("--label-smoothing", type=float, default=0.1, help="Label smoothing")
+    parser.add_argument("--resume-from", default=None, help="Path to checkpoint to resume SFT from")
     args = parser.parse_args()
 
     print(f"Device: {'cuda' if torch.cuda.is_available() else 'cpu'}")
@@ -431,6 +435,10 @@ def main():
             val_csv = os.path.join(DATA_DIR, "aligned_val_split.csv")
             print(f"Augmented data not found, falling back to: {train_csv}")
 
+        # When resuming from a checkpoint, keep the same output dir
+        if args.resume_from:
+            model_path = args.resume_from
+
         run_sft(
             model_name=model_path,
             output_dir=sft_dir,
@@ -440,6 +448,7 @@ def main():
             lr=args.sft_lr,
             batch_size=args.batch_size,
             label_smoothing=args.label_smoothing,
+            resume_from_checkpoint=args.resume_from,
         )
 
     print("\n✓ Training complete.")

@@ -1,0 +1,101 @@
+Device: cuda
+
+============================================================
+TASK 1: 10-sentence model comparison
+============================================================
+
+[1/4] ByT5-base...
+  Loading ByT5 from /home/leo.rodrigues/Akkadian_MT/checkpoints/byt5-base/best_model
+Loading weights:   0%|          | 0/254 [00:00<?, ?it/s]Loading weights: 100%|██████████| 254/254 [00:00<00:00, 3080.42it/s]
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to encoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to decoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+    4/4
+
+[2/4] ByT5-base-sft...
+  Loading ByT5 from /home/leo.rodrigues/Akkadian_MT/checkpoints/byt5-base-sft/best_model
+Loading weights:   0%|          | 0/254 [00:00<?, ?it/s]Loading weights: 100%|██████████| 254/254 [00:00<00:00, 11668.58it/s]
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to encoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to decoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/nn/modules/transformer.py:508: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. We recommend specifying layout=torch.jagged when constructing a nested tensor, as this layout receives active development, has better operator coverage, and works with torch.compile. (Triggered internally at /pytorch/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+    4/4
+
+[3/4] BiLSTM...
+  Loading BiLSTM...
+
+[4/4] Transformer...
+  Loading Transformer...
+
+Saved: /home/leo.rodrigues/Akkadian_MT/sample_model_translations_10.csv
+
+============================================================
+TASK 2: ByT5-large-sft evaluation on augmented val split
+============================================================
+Val samples: 790
+  Loading ByT5 from /home/leo.rodrigues/Akkadian_MT/checkpoints/byt5-large-sft/best_model
+Loading weights:   0%|          | 0/500 [00:00<?, ?it/s]Loading weights:   2%|▏         | 10/500 [00:00<00:04, 98.90it/s]Loading weights:   4%|▍         | 20/500 [00:00<00:08, 57.64it/s]Loading weights:   6%|▌         | 31/500 [00:00<00:06, 70.63it/s]Loading weights:  11%|█         | 56/500 [00:00<00:03, 120.53it/s]Loading weights:  14%|█▍        | 70/500 [00:00<00:04, 86.17it/s] Loading weights:  18%|█▊        | 91/500 [00:00<00:03, 113.06it/s]Loading weights:  21%|██▏       | 107/500 [00:01<00:03, 118.45it/s]Loading weights:  24%|██▍       | 121/500 [00:01<00:04, 84.18it/s] Loading weights:  29%|██▊       | 143/500 [00:01<00:03, 96.67it/s]Loading weights:  31%|███       | 155/500 [00:01<00:03, 97.92it/s]Loading weights:  33%|███▎      | 167/500 [00:01<00:04, 80.33it/s]Loading weights:  37%|███▋      | 183/500 [00:02<00:03, 84.28it/s]Loading weights:  39%|███▊      | 193/500 [00:02<00:05, 58.82it/s]Loading weights:  40%|████      | 201/500 [00:02<00:05, 56.82it/s]Loading weights:  42%|████▏     | 208/500 [00:02<00:06, 44.43it/s]Loading weights:  43%|████▎     | 214/500 [00:02<00:06, 42.92it/s]Loading weights:  44%|████▍     | 222/500 [00:03<00:06, 43.34it/s]Loading weights:  47%|████▋     | 233/500 [00:03<00:06, 39.51it/s]Loading weights:  48%|████▊     | 238/500 [00:03<00:06, 37.90it/s]Loading weights:  51%|█████     | 256/500 [00:03<00:04, 58.96it/s]Loading weights:  53%|█████▎    | 266/500 [00:03<00:03, 64.13it/s]Loading weights:  55%|█████▍    | 274/500 [00:04<00:04, 53.22it/s]Loading weights:  56%|█████▌    | 281/500 [00:04<00:05, 42.42it/s]Loading weights:  59%|█████▊    | 293/500 [00:04<00:03, 54.14it/s]Loading weights:  62%|██████▏   | 309/500 [00:04<00:02, 71.05it/s]Loading weights:  64%|██████▎   | 318/500 [00:04<00:02, 67.32it/s]Loading weights:  65%|██████▌   | 326/500 [00:04<00:02, 66.74it/s]Loading weights:  67%|██████▋   | 335/500 [00:05<00:02, 71.81it/s]Loading weights:  70%|███████   | 352/500 [00:05<00:01, 81.55it/s]Loading weights:  73%|███████▎  | 364/500 [00:05<00:01, 68.13it/s]Loading weights:  75%|███████▌  | 377/500 [00:05<00:02, 61.19it/s]Loading weights:  80%|████████  | 402/500 [00:05<00:01, 77.59it/s]Loading weights:  82%|████████▏ | 411/500 [00:06<00:01, 67.47it/s]Loading weights:  84%|████████▎ | 418/500 [00:06<00:01, 55.29it/s]Loading weights:  86%|████████▌ | 430/500 [00:06<00:01, 55.89it/s]Loading weights:  87%|████████▋ | 436/500 [00:06<00:01, 42.42it/s]Loading weights:  90%|████████▉ | 449/500 [00:06<00:00, 52.82it/s]Loading weights:  91%|█████████ | 456/500 [00:07<00:01, 42.15it/s]Loading weights:  95%|█████████▌| 475/500 [00:07<00:00, 63.29it/s]Loading weights:  97%|█████████▋| 484/500 [00:07<00:00, 65.70it/s]Loading weights: 100%|██████████| 500/500 [00:07<00:00, 66.49it/s]
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to encoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to decoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+    16/790
+    32/790
+    48/790
+    64/790
+    80/790
+    96/790
+    112/790
+    128/790
+    144/790
+    160/790
+    176/790
+    192/790
+    208/790
+    224/790
+    240/790
+    256/790
+    272/790
+    288/790
+    304/790
+    320/790
+    336/790
+    352/790
+    368/790
+    384/790
+    400/790
+    416/790
+    432/790
+    448/790
+    464/790
+    480/790
+    496/790
+    512/790
+    528/790
+    544/790
+    560/790
+    576/790
+    592/790
+    608/790
+    624/790
+    640/790
+    656/790
+    672/790
+    688/790
+    704/790
+    720/790
+    736/790
+    752/790
+    768/790
+    784/790
+    790/790
+
+============================================================
+ByT5-large-sft Local Results
+  BLEU:     31.82
+  chrF++:   49.96
+  Geo Mean: 39.87
+  Saved to: /home/leo.rodrigues/Akkadian_MT/checkpoints/byt5-large-sft/eval_results-local.json
+============================================================
+
+Done.

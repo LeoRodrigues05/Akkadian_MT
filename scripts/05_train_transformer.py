@@ -2,6 +2,7 @@
 STEP 6 — Baseline 3: Vanilla Transformer from scratch
 Academic comparison baseline — character-level small Transformer for Akkadian → English MT.
 """
+import argparse
 import os
 import json
 import math
@@ -19,7 +20,6 @@ SCRIPT_DIR = os.path.dirname(__file__)
 PROJECT_DIR = os.path.join(SCRIPT_DIR, "..")
 DATA_DIR = os.path.join(SCRIPT_DIR, "data")
 OUTPUT_DIR = os.path.join(PROJECT_DIR, "checkpoints", "transformer")
-os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # ── Hyperparameters ────────────────────────────────────────────────────────
 D_MODEL = 256
@@ -255,12 +255,26 @@ def evaluate_model(model, val_loader, tgt_vocab):
 
 
 def main():
+    global OUTPUT_DIR
+    parser = argparse.ArgumentParser(description="Train Vanilla Transformer")
+    parser.add_argument("--train-csv", default=os.path.join(DATA_DIR, "aligned_train_split.csv"),
+                        help="Path to training CSV (default: aligned_train_split.csv)")
+    parser.add_argument("--val-csv", default=os.path.join(DATA_DIR, "aligned_val_split.csv"),
+                        help="Path to validation CSV (default: aligned_val_split.csv)")
+    parser.add_argument("--output-dir", default=OUTPUT_DIR,
+                        help="Directory for best_model.pt and eval_results.json "
+                             "(default: checkpoints/transformer)")
+    args = parser.parse_args()
+
+    OUTPUT_DIR = args.output_dir
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
     print(f"Device: {DEVICE}")
     print(f"Output dir: {OUTPUT_DIR}")
 
     # ── Load data ──────────────────────────────────────────────────────────
-    train_df = pd.read_csv(os.path.join(DATA_DIR, "aligned_train_split.csv")).dropna()
-    val_df = pd.read_csv(os.path.join(DATA_DIR, "aligned_val_split.csv")).dropna()
+    train_df = pd.read_csv(args.train_csv).dropna()
+    val_df = pd.read_csv(args.val_csv).dropna()
     print(f"Train: {len(train_df)}, Val: {len(val_df)}")
 
     src_texts = train_df["transliteration"].tolist()

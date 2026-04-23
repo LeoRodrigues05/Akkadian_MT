@@ -1,0 +1,36 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/500 [00:00<?, ?it/s]Loading weights:  28%|██▊       | 138/500 [00:00<00:00, 1190.93it/s]Loading weights:  52%|█████▏    | 258/500 [00:00<00:00, 828.05it/s] Loading weights:  74%|███████▍  | 369/500 [00:00<00:00, 923.80it/s]Loading weights:  95%|█████████▌| 475/500 [00:00<00:00, 967.85it/s]Loading weights: 100%|██████████| 500/500 [00:00<00:00, 964.77it/s]
+The tied weights mapping and config for this model specifies to tie shared.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to encoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie shared.weight to decoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+Tokenizing train:   0%|          | 0/10009 [00:00<?, ? examples/s]Tokenizing train:  10%|▉         | 1000/10009 [00:04<00:40, 224.34 examples/s]Tokenizing train:  20%|█▉        | 2000/10009 [00:08<00:33, 241.08 examples/s]Tokenizing train:  30%|██▉       | 3000/10009 [00:12<00:29, 236.17 examples/s]Tokenizing train:  40%|███▉      | 4000/10009 [00:16<00:25, 236.40 examples/s]Tokenizing train:  50%|████▉     | 5000/10009 [00:21<00:21, 233.24 examples/s]Tokenizing train:  60%|█████▉    | 6000/10009 [00:25<00:17, 234.80 examples/s]Tokenizing train:  70%|██████▉   | 7000/10009 [00:29<00:12, 240.75 examples/s]Tokenizing train:  80%|███████▉  | 8000/10009 [00:33<00:08, 244.64 examples/s]Tokenizing train:  90%|████████▉ | 9000/10009 [00:37<00:04, 242.30 examples/s]Tokenizing train: 100%|█████████▉| 10000/10009 [00:41<00:00, 243.63 examples/s]Tokenizing train: 100%|██████████| 10009/10009 [00:41<00:00, 239.84 examples/s]
+Tokenizing val:   0%|          | 0/790 [00:00<?, ? examples/s]Tokenizing val: 100%|██████████| 790/790 [00:04<00:00, 172.30 examples/s]Tokenizing val: 100%|██████████| 790/790 [00:04<00:00, 172.25 examples/s]
+warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+  0%|          | 0/2355 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/15_train_byt5_large.py", line 449, in <module>
+    main()
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/15_train_byt5_large.py", line 434, in main
+    run_sft(
+  File "/home/leo.rodrigues/Akkadian_MT/scripts/15_train_byt5_large.py", line 356, in run_sft
+    trainer.train()
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer.py", line 1424, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer.py", line 1506, in _inner_training_loop
+    self._run_epoch(
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer.py", line 1734, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/transformers/trainer.py", line 1934, in training_step
+    self.accelerator.backward(loss, **kwargs)
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/accelerate/accelerator.py", line 2838, in backward
+    loss.backward(**kwargs)
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/_tensor.py", line 626, in backward
+    torch.autograd.backward(
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/home/leo.rodrigues/miniconda3/envs/leo-akkadian-1/lib/python3.11/site-packages/torch/autograd/graph.py", line 823, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 12.00 MiB. GPU 0 has a total capacity of 31.58 GiB of which 17.31 MiB is free. Process 1067520 has 26.49 GiB memory in use. Including non-PyTorch memory, this process has 4.88 GiB memory in use. Of the allocated memory 4.40 GiB is allocated by PyTorch, and 108.30 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  0%|          | 0/2355 [00:01<?, ?it/s]
