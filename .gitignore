@@ -4,7 +4,7 @@ checkpoints/*/checkpoint-*/
 checkpoints/byt5-base/best_model/model.safetensors
 checkpoints/bilstm/best_model.pt
 checkpoints/transformer/best_model.pt
-kaggle_dataset/model.safetensors
+kaggle/
 scripts/data/*.csv
 *.safetensors
 *.pt

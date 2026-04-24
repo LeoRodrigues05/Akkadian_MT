@@ -1,0 +1,43 @@
+{
+  "model_path": "checkpoints/byt5-base-sft/best_model",
+  "val_csv": "/home/leo.rodrigues/Akkadian_MT/scripts/data/augmented_val_split.csv",
+  "val_samples": 790,
+  "beam_sweep": [
+    {
+      "bleu": 30.059208668676195,
+      "chrf++": 48.00520882880207,
+      "geo_mean": 37.98682125906744,
+      "num_beams": 1,
+      "seconds": 939.0149013996124
+    },
+    {
+      "bleu": 29.948453287024055,
+      "chrf++": 48.18070878405833,
+      "geo_mean": 37.98601988041233,
+      "num_beams": 2,
+      "seconds": 839.0509595870972
+    },
+    {
+      "bleu": 30.18166976713192,
+      "chrf++": 48.70758689991453,
+      "geo_mean": 38.34157408045608,
+      "num_beams": 4,
+      "seconds": 848.5288016796112
+    },
+    {
+      "bleu": 29.858920597341626,
+      "chrf++": 48.305597796173885,
+      "geo_mean": 37.978322882969394,
+      "num_beams": 8,
+      "seconds": 943.4157845973969
+    },
+    {
+      "bleu": 30.033517464704754,
+      "chrf++": 48.37040907799472,
+      "geo_mean": 38.11474158142579,
+      "num_beams": 16,
+      "seconds": 1165.918212890625
+    }
+  ],
+  "mbr_sweep": []
+}

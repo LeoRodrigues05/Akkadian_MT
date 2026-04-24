@@ -151,7 +151,7 @@ sample_df["transformer"] = generate_transformer(texts)
 
 out_cols = ["id", "line_start", "line_end", "transliteration",
             "clean_transliteration", "byt5_base", "byt5_sft", "bilstm", "transformer"]
-comparison_path = os.path.join(PROJECT_DIR, "sample_model_translations_10.csv")
+    comparison_path = os.path.join(PROJECT_DIR, "results", "sample_model_translations_10.csv")
 sample_df[out_cols].to_csv(comparison_path, index=False)
 print(f"\nSaved: {comparison_path}")
 

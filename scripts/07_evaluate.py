@@ -88,7 +88,7 @@ def main():
         print(f"\nBest model: {best[0]} (Geo Mean: {best[1]['geo_mean']:.2f})")
 
     # ── Save combined results ──────────────────────────────────────────────
-    output_path = os.path.join(PROJECT_DIR, "results_comparison.json")
+    output_path = os.path.join(PROJECT_DIR, "results", "results_comparison.json")
     with open(output_path, "w") as f:
         json.dump(all_results, f, indent=2)
     print(f"\nResults saved to: {output_path}")
